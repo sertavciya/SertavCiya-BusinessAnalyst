@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         appearOnScroll.observe(element);
     });
 
-    // Form submission prevent default
+    // Form AJAX submission
     const form = document.getElementById('contactForm');
     if(form) {
         form.addEventListener('submit', (e) => {
@@ -95,19 +95,35 @@ document.addEventListener('DOMContentLoaded', () => {
             
             btn.innerHTML = 'Gönderiliyor... <i class="fas fa-spinner fa-spin"></i>';
             btn.disabled = true;
-            
-            // Simulate network request
-            setTimeout(() => {
-                btn.innerHTML = 'Mesaj İletildi! <i class="fas fa-check"></i>';
-                btn.style.background = '#27c93f';
-                form.reset();
-                
+
+            fetch(form.action, {
+                method: "POST",
+                body: new FormData(form)
+            })
+            .then(response => {
+                if(response.ok) {
+                    btn.innerHTML = 'Mesaj İletildi! <i class="fas fa-check"></i>';
+                    btn.style.background = '#27c93f';
+                    form.reset();
+                } else {
+                    btn.innerHTML = 'Hata Oluştu <i class="fas fa-times"></i>';
+                    btn.style.background = '#e11d48';
+                }
                 setTimeout(() => {
                     btn.innerHTML = originalText;
                     btn.style.background = '';
                     btn.disabled = false;
                 }, 3000);
-            }, 1500);
+            })
+            .catch(error => {
+                btn.innerHTML = 'Hata Oluştu <i class="fas fa-times"></i>';
+                btn.style.background = '#e11d48';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = '';
+                    btn.disabled = false;
+                }, 3000);
+            });
         });
     }
 });
