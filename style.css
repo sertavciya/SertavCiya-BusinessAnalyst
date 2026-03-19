@@ -46,7 +46,7 @@ html {
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--bg-dark);
-    background-image: url('background.jpg');
+    background-image: url('background.jpg.png');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
